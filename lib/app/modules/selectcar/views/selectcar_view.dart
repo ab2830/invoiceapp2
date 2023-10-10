@@ -10,6 +10,7 @@ import '../../../../utils/assets_const.dart';
 import '../../../../utils/colors_const.dart';
 import '../../../../utils/string_const.dart';
 import '../../createbillview/controllers/createbillview_controller.dart';
+import '../../editbilldata/controllers/editbilldata_controller.dart';
 import '../controllers/selectcar_controller.dart';
 
 class SelectcarView extends GetView<SelectcarController> {
@@ -127,10 +128,24 @@ class SelectcarView extends GetView<SelectcarController> {
                                   child: GestureDetector(
                                     onTap: (){
                                       var con=Get.put(CreatebillviewController());
-                                      con.selectCarID=controller.carListData[index].carBrandId;
-                                      con.carNameController.text=controller.carListData[index].title.toString();
-                                      con.update();
-                                      Get.back();
+                                      var edit=Get.put(EditbilldataController());
+                                      print("value of------${edit.isCarNameEdit}");
+                                      if(edit.isCarNameEdit==false){
+                                        con.selectCarID=controller.carListData[index].carBrandId;
+                                        con.carNameController.text=controller.carListData[index].title.toString();
+                                        con.update();
+                                        Get.back();
+
+                                      }
+                                      else{
+                                        print("edit carrrrrr");
+                                        edit.selectCarID=controller.carListData[index].carBrandId;
+                                        edit.carNameController.text=controller.carListData[index].title.toString();
+                                        edit.update();
+                                        Get.back();
+
+                                      }
+
                                     },
                                     child: ListTile(
                                       title: Text(controller.carListData[index].title

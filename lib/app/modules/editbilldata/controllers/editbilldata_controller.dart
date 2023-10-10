@@ -1,24 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:freelancing/app/modules/bottamnavigationview/views/bottamnavigationview_view.dart';
-import 'package:freelancing/app/modules/homeview/controllers/homeview_controller.dart';
-import 'package:freelancing/utils/api_services.dart';
-import 'package:freelancing/utils/network_utils.dart';
-import 'package:freelancing/utils/string_const.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../demo_class.dart';
 import '../../../../main.dart';
+import '../../../../utils/api_services.dart';
+import '../../../../utils/model/bill_details_model.dart';
+import '../../../../utils/network_utils.dart';
 import '../../bottamnavigationview/controllers/bottamnavigationview_controller.dart';
+import '../../homeview/controllers/homeview_controller.dart';
 import '../../searchview/controllers/searchview_controller.dart';
 
 enum BillTyep { GSTBill, NonGSTBill }
 
-class CreatebillviewController extends GetxController {
-  //TODO: Implement CreatebillviewController
-
+class EditbilldataController extends GetxController {
+  var id = Get.arguments;
   Rx<BillTyep> selecteBillTyep = BillTyep.GSTBill.obs;
 
   List<String> warentyType = ["Kilometer", "Months"];
@@ -52,6 +50,10 @@ class CreatebillviewController extends GetxController {
     "72",
     "78"
   ];
+  bool isCarNameEdit=false;
+  bool isTyreSizeEdit=false;
+  bool isCompanyEdit=false;
+  var user_id;
 
   void updateselecteBillTyep(BillTyep nb) {
     print("nb--------${nb}");
@@ -82,7 +84,6 @@ class CreatebillviewController extends GetxController {
   final discountController = TextEditingController();
   final carNoController = TextEditingController();
   final customerNameController = TextEditingController();
-  final mobileNumberController = TextEditingController();
   final tyreSizeController = TextEditingController();
   final carNameController = TextEditingController();
   final kmController = TextEditingController();
@@ -167,6 +168,7 @@ class CreatebillviewController extends GetxController {
   }
 
   addPrice(double price, String name) {
+    print("callllllll funcation");
     print("name::---name--${name}");
     print("pirce::---pirce--${price}");
     billingItems.forEach((element) {
@@ -280,17 +282,17 @@ class CreatebillviewController extends GetxController {
     update();
   }
 
-  getInvoiceNumber() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var authToken = prefs.getString(kAccessToken);
-
-    var invoice = baseurl + getInvoiceNo + "/1"; //make dynamic
-    var response =
-        await APIServices.getMethodWithHeaderDio(invoice, token: authToken);
-    print("object-----${response.data['data']['invoice_number']}");
-    billNoController.text = response.data['data']['invoice_number'].toString();
-    update();
-  }
+  // getInvoiceNumber() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var authToken = prefs.getString(kAccessToken);
+  //
+  //   var invoice = baseurl + getInvoiceNo + "/1"; //make dynamic
+  //   var response =
+  //   await APIServices.getMethodWithHeaderDio(invoice, token: authToken);
+  //   print("object-----${response.data['data']['invoice_number']}");
+  //   billNoController.text = response.data['data']['invoice_number'].toString();
+  //   update();
+  // }
 
   List<String> selectedChips = [];
 
@@ -345,23 +347,22 @@ class CreatebillviewController extends GetxController {
       itemsList.add(item);
     }
 
-    logger.d("this new itme invoce::---${itemsList}");
+    logger.d("this new itme tyre_SizeIdtyre_SizeId::---${tyre_SizeId}");
 
     var date = DateFormat('yyyy-MM-dd HH:mm:ss')
         .format(selectedDate ?? DateTime.now());
     print("yeeee date:-${date}");
     var data = {
-      "invoice_id": 0,
+      "invoice_id": user_id,
       "invoice_type": 1,
       "user_id": 0,
-      "phone_number":mobileNumberController.text,
       "user_name": customerNameController.text,
       "invoice_no": int.parse(billNoController.text.toString()),
       "invoice_date": date,
       "car_no": carNoController.text,
       "is_gst": isgstBill.value == true ? 0 : 1,
       "is_alignment_balancing": isChecked == true ? 1 : 0,
-      "tyre_type_id": tyre_SizeId,
+      "tyre_type_id": int.parse(tyre_SizeId.toString())  ,
       "car_brand_id": selectCarID,
       "subtotal": subtotal,
       "final_total": grandTotal,
@@ -382,16 +383,20 @@ class CreatebillviewController extends GetxController {
 
     //   print("reponse:222:--${response.data}");
     if (response.data['message'] == "Success.") {
-      var home = Get.put(BottamnavigationviewController());
-      home.persistentTabController!.index=2;
-      home.update();
-      // var search = Get.put(SearchviewController());
-      // search.emptySearchdata();
-      // search.update();
+      var  bottam = Get.put(
+          BottamnavigationviewController());
 
-      // home.getDashBoardData();
-      // home.update();
-      // Ge.
+      var home = Get.put(HomeviewController());
+      var search = Get.put(SearchviewController());
+      search.emptySearchdata();
+
+      search.update();
+
+      home.getDashBoardData();
+      home.update();
+      bottam.persistentTabController!.index=2;
+      bottam.update();
+      Get.back();
       Get.snackbar("Success", "Invoice create Successfully",
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.white);
     } else {
@@ -403,7 +408,8 @@ class CreatebillviewController extends GetxController {
   @override
   void onInit() {
     setDefaultDate();
-    getInvoiceNumber();
+    //getInvoiceNumber();
+    getInvoiceData();
     super.onInit();
   }
 
@@ -412,10 +418,92 @@ class CreatebillviewController extends GetxController {
     super.onReady();
   }
 
+  var userid;
+
+  getInvoiceData() async {
+    if(id !=null){
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var authToken = prefs.getString(kAccessToken);
+
+    var invoice = baseurl + getInvoiceDetails + "/$id"; //make dynamic
+
+    var response =
+        await APIServices.getMethodWithHeaderDio(invoice, token: authToken);
+    final invoicedata = response.data;
+    logger.d("yeeeeeee-----${invoicedata['data']['invoiceData']}");
+    var a = InvoiceData.fromJson(invoicedata['data']['invoiceData']);
+    billNoController.text = a.invoiceId.toString();
+    carNoController.text = a.carNo.toString();
+    customerNameController.text = a.userName.toString();
+    user_id = a.userId;
+    tyre_SizeId=a.tyreType!.tyreTypeId;
+    carNameController.text =a.carBrand!.title.toString();
+    selectCarID = a.carBrandId!.toInt();
+    tyreSizeController.text = a.tyreType!.title.toString();
+    kmController.text = a.currentKm.toString();
+    selectedwarentyType = a.warrentyType == 1 ? "Kilometer" : "Months";
+    if (a.warrentyType == 1) {
+      defaultKm = a.warrentyValue.toString();
+    } else {
+      defaultMonth = a.warrentyValue.toString();
+    }
+
+    for (var b = 0; b < a.innerInvoice!.length; b++) {
+      if (a.innerInvoice?[b].itemType == 1) {
+        addChip(a.innerInvoice![b].tyreBrand!.title.toString(), 0);
+         await addPrice(a.innerInvoice![b].price!.toDouble(), a.innerInvoice![b].tyreBrand!.title.toString());
+
+        bool foundMatchingItem = false;
+        print("in-----22222--55");
+
+
+        for (var item in billingItems) {
+
+          if (item.itemName == a.innerInvoice![b].tyreBrand!.title.toString()) {
+            double.parse(
+                getControllerOf(
+                    item.index
+                    .toString())
+                .text= a.innerInvoice![b].price.toString());
+
+            print("adddddd chippp-----found");
+          //  item.quantity = item.quantity + 1;
+
+            foundMatchingItem = true;
+            update();
+            break; // Exit the loop since the item was found and updated
+          }
+        }
+
+        if (!foundMatchingItem) {
+          final billingItem = BillingItem(
+              itemID: a.innerInvoice![b].tyreBrandId!.toInt(),
+              rate: a.innerInvoice![b].price!.toDouble(),
+              index: 1,
+              itemName: a.innerInvoice![b].tyreBrand!.title.toString(),
+              price: a.innerInvoice![b].price!.toDouble(),
+              quantity: 0);
+          billingItems.add(billingItem);
+
+          print("adddddd chippp-----not found---${billingItems.length}");
+
+          update();
+        }
+
+
+        update();
+      } else if (a.innerInvoice?[b].itemType == 2) {
+        aligmnetPrice.text = a.innerInvoice![b].price.toString();
+      }
+    }
+
+    update();
+  }
+
   @override
   void onClose() {
     super.onClose();
   }
 
   void increment() => count.value++;
-}
+}}

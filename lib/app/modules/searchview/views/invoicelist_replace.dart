@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:freelancing/app/modules/editbill/views/editbill_view.dart';
 import 'package:freelancing/app/modules/editbilldata/views/editbilldata_view.dart';
-import 'package:freelancing/app/modules/invoicepdf/views/invoicepdf_view.dart';
 import 'package:freelancing/utils/colors_const.dart';
 
 import 'package:get/get.dart';
@@ -18,8 +17,8 @@ import '../../../../utils/string_const.dart';
 import '../../replacementbill/views/replacementbill_view.dart';
 import '../controllers/searchview_controller.dart';
 
-class SearchviewView extends GetView<SearchviewController> {
-  SearchviewView({Key? key}) : super(key: key);
+class ReplaceInvoice extends GetView<SearchviewController> {
+  ReplaceInvoice({Key? key}) : super(key: key);
   var search = Get.put(SearchviewController());
 
 
@@ -44,7 +43,18 @@ class SearchviewView extends GetView<SearchviewController> {
                     color: Colors.black)),
             backgroundColor: Colors.white,
             centerTitle: true,
+            leading: GestureDetector(
+                onTap: () {
+                  controller.searchController.clear();
+                  controller.emptySearchdata();
 
+                  controller.update();
+                  Get.back();
+                },
+                child: const Icon(
+                  FontAwesomeIcons.angleLeft,
+                  color: Colors.black,
+                )),
           ),
           body: Column(
             children: [
@@ -84,14 +94,14 @@ class SearchviewView extends GetView<SearchviewController> {
                 child:
                 search.invoceListData.isEmpty && search.searchController.text.isNotEmpty?
                 const Center(child: Text("No Data Found")):
-                RefreshIndicator(
-                  onRefresh: ()async{
-                    await Future.delayed(Duration(seconds: 2));
-                    controller.firstLoad();
-                  },
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    controller:  search.scrollController,
+                SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller:  search.scrollController,
+                  child: RefreshIndicator(
+                    onRefresh: ()async{
+                      await Future.delayed(Duration(seconds: 2));
+                      controller.firstLoad();
+                    },
                     child: ListView.separated(
                       padding: EdgeInsets.only(bottom: 16),
                       physics: const  NeverScrollableScrollPhysics(),
@@ -115,28 +125,18 @@ class SearchviewView extends GetView<SearchviewController> {
                                 SizedBox(
                                   height: 16.h,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: ConstColor.appPrimary2,
-                                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                                      padding: EdgeInsets.all(8),
-                                      child: Text(
-                                        "INVOICE",
-                                        style: GoogleFonts.dmSans(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 12.sp,
-                                            color: ConstColor.white),
-                                      ),
-                                    ),
-                                    IconButton(onPressed: (){
-                                      Get.to(InvoicepdfView());
-                                    }, icon:   Icon(FontAwesomeIcons.shareNodes,color: ConstColor.appPrimary1,))
-
-
-                                  ],
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: ConstColor.appPrimary2,
+                                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    "INVOICE",
+                                    style: GoogleFonts.dmSans(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12.sp,
+                                        color: ConstColor.white),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 8.h,
@@ -162,28 +162,24 @@ class SearchviewView extends GetView<SearchviewController> {
                                       //   style: GoogleFonts.dmSans(
                                       //       fontSize: 16,
                                       //       fontWeight: FontWeight.w700,
-                                      //
-                                      //
                                       //       color: ConstColor.rbillTextColor
                                       //   ),),
                                     ),
 
                                     GestureDetector(
 
-                                      onTap:(){
-                                        print("----------********${index}");
-                                        Get.snackbar(
-                                            "",
-                                            "Cooming soon",
-                                            snackPosition: SnackPosition.TOP,
-                                            colorText: Colors.black
-                                        );
+                                        onTap:(){
+                                          print("----------********${index}");
 
-                                     //   Get.to(EditbilldataView(),arguments: controller.invoceListData[index].invoiceId);
-                                    //    Get.to(EditbillView(),arguments:controller.invoceListData[index].invoiceId );
+                                              Get.to(EditbillView(),arguments:controller.invoceListData[index].invoiceId );
 
-                        },
-                                        child: SvgPicture.asset("assets/Edit.svg",height: 25.h,width: 25.w,))
+                                        },
+                                        child:Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(FontAwesomeIcons.exchange,color: ConstColor.appPrimary1,),
+                                        )
+                                        // SvgPicture.asset("assets/swap.svg",height: 25.h,width: 25.w,)
+                                    )
 
                                   ],
                                 ),

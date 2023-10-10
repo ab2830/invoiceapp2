@@ -16,6 +16,12 @@ abstract class Routes {
   static const TYRESELECT = _Paths.TYRESELECT;
   static const TYRESIZE = _Paths.TYRESIZE;
   static const INVOICELIST = _Paths.INVOICELIST;
+  static const CHECKCONNECTION = _Paths.CHECKCONNECTION;
+  static const EDITBILL = _Paths.EDITBILL;
+  static const EDITTYREBRAND = _Paths.EDITTYREBRAND;
+  static const EDITBILLDATA = _Paths.EDITBILLDATA;
+  static const INVOICEPDF = _Paths.INVOICEPDF;
+  static const FILLTERDASHBOARD = _Paths.FILLTERDASHBOARD;
 }
 
 abstract class _Paths {
@@ -33,4 +39,10 @@ abstract class _Paths {
   static const TYRESELECT = '/tyreselect';
   static const TYRESIZE = '/tyresize';
   static const INVOICELIST = '/invoicelist';
+  static const CHECKCONNECTION = '/checkconnection';
+  static const EDITBILL = '/editbill';
+  static const EDITTYREBRAND = '/edittyrebrand';
+  static const EDITBILLDATA = '/editbilldata';
+  static const INVOICEPDF = '/invoicepdf';
+  static const FILLTERDASHBOARD = '/fillterdashboard';
 }

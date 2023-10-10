@@ -11,6 +11,8 @@ const String tyreSizeList="listTyreTypes";
 const String dashboardstats="dashboardStat";
 const String getallBillList="listInvoice";
 const String getInvoiceNo="getInvoiceNumber";
+const String getInvoiceDetails="getInvoice";
+
 const String creteInvoice="invoice";
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -75,6 +76,10 @@ class LoginviewView extends GetView<LoginviewController> {
                           color: Colors.white),
                       autofocus: false,
                       textInputAction: TextInputAction.done,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+
+                      ],
                       keyboardType: TextInputType.number,
                       focusNode: controller.emailFouce,
                       controller: controller.emailController,
@@ -96,6 +101,7 @@ class LoginviewView extends GetView<LoginviewController> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         isCollapsed: false,
+
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.white, width: 1.5),
                             borderRadius: BorderRadius.circular(10)),

@@ -89,6 +89,7 @@ class SearchviewController extends GetxController {
   }
 
   void firstLoad() async {
+    print("callllll----33");
     isFirstLoadRunning = true;
     update();
     try {
@@ -127,6 +128,7 @@ update();
   }
 
   void loadMore() async {
+    print("call loade more");
     if (isFirstLoadRunning == false &&
         isLoadMoreRunning == false &&
         invoceListData.length != dataLength &&
@@ -150,7 +152,7 @@ update();
             token: authToken);
         final invoiceData = finaldata.data;
         if (invoiceData['statusCode'] == 200) {
-          if (invoiceData['data']['car_brand_data'] != null) {
+          if (invoiceData['data']['invoice_data'] != null) {
             List<InvoiceListModel> peginationData =invoiceData['data']['invoice_data']['rows']
                 .map<InvoiceListModel>((json) => InvoiceListModel.fromJson(json))
                 .toList();

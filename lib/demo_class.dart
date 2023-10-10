@@ -14,6 +14,28 @@ int itemID;
 
 
 }
+
+
+
+class BillingItemEdit {
+  int index;
+  int invoiceItemId;
+  String itemName;
+  int itemID;
+  int quantity;
+  double rate=0.0;
+  double? newprice;
+  bool ischeck =false;
+
+  double price;
+
+
+  BillingItemEdit(
+
+      {required this.ischeck,  required this.invoiceItemId, required this.itemID,required this.rate,  required this.index,required this.itemName, required this.price, required this.quantity,this.newprice});
+
+
+}
 // - Dashboard par data static che --dyanmic
 // - logout not working--done
 // - login not validate I can enter anything-its working

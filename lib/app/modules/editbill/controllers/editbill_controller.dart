@@ -1,30 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:freelancing/app/modules/bottamnavigationview/views/bottamnavigationview_view.dart';
-import 'package:freelancing/app/modules/homeview/controllers/homeview_controller.dart';
-import 'package:freelancing/utils/api_services.dart';
-import 'package:freelancing/utils/network_utils.dart';
-import 'package:freelancing/utils/string_const.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../demo_class.dart';
 import '../../../../main.dart';
+import '../../../../utils/api_services.dart';
+import '../../../../utils/model/bill_details_model.dart';
+import '../../../../utils/network_utils.dart';
 import '../../bottamnavigationview/controllers/bottamnavigationview_controller.dart';
+import '../../createbillview/controllers/createbillview_controller.dart';
+import '../../homeview/controllers/homeview_controller.dart';
 import '../../searchview/controllers/searchview_controller.dart';
 
-enum BillTyep { GSTBill, NonGSTBill }
-
-class CreatebillviewController extends GetxController {
-  //TODO: Implement CreatebillviewController
-
+class EditbillController extends GetxController {
+  //TODO: Implement EditbillController
   Rx<BillTyep> selecteBillTyep = BillTyep.GSTBill.obs;
 
   List<String> warentyType = ["Kilometer", "Months"];
   String selectedwarentyType = "Kilometer";
   String defaultKm = "10000";
+  var oldInvoiceNo;
   String defaultMonth = "6";
+  int oldqty=0;
+  int? totalOldQTY=0;
   List<String> warentyTypeKm = [
     "10000",
     "200000",
@@ -52,6 +52,14 @@ class CreatebillviewController extends GetxController {
     "72",
     "78"
   ];
+
+  List<InvoiceData> invoiceData = [];
+  BillDeatilsModel? billDeatilsModel;
+  final List<BillingItem> billingItems = [];
+  final List<BillingItemEdit> oldbillingItems = [];
+  List itemIds=[];
+  final List<BillingItemEdit> selectedBillItem = [];
+  var id = Get.arguments;
 
   void updateselecteBillTyep(BillTyep nb) {
     print("nb--------${nb}");
@@ -82,7 +90,6 @@ class CreatebillviewController extends GetxController {
   final discountController = TextEditingController();
   final carNoController = TextEditingController();
   final customerNameController = TextEditingController();
-  final mobileNumberController = TextEditingController();
   final tyreSizeController = TextEditingController();
   final carNameController = TextEditingController();
   final kmController = TextEditingController();
@@ -93,6 +100,8 @@ class CreatebillviewController extends GetxController {
   List<TextEditingController>? priceControllers = [];
   int? tyre_CompanyId;
   int? tyre_SizeId;
+  var tyre_type_id;
+  var userId;
   DateTime? selectedDate;
 
   //car name id
@@ -113,7 +122,6 @@ class CreatebillviewController extends GetxController {
     'Option 3',
     'Option 4'
   ];
-  final List<BillingItem> billingItems = [];
 
   setDefaultDate() {
     dateController.text =
@@ -165,6 +173,7 @@ class CreatebillviewController extends GetxController {
     return billingItems.fold(
         0, (total, item) => total + (item.quantity * item.price));
   }
+
 
   addPrice(double price, String name) {
     print("name::---name--${name}");
@@ -284,7 +293,7 @@ class CreatebillviewController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var authToken = prefs.getString(kAccessToken);
 
-    var invoice = baseurl + getInvoiceNo + "/1"; //make dynamic
+    var invoice = baseurl + getInvoiceNo + "/2"; //make dynamic
     var response =
         await APIServices.getMethodWithHeaderDio(invoice, token: authToken);
     print("object-----${response.data['data']['invoice_number']}");
@@ -292,21 +301,132 @@ class CreatebillviewController extends GetxController {
     update();
   }
 
+  getInvoiceData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var authToken = prefs.getString(kAccessToken);
+
+    var invoice = baseurl + getInvoiceDetails + "/$id"; //make dynamic
+
+    var response =
+        await APIServices.getMethodWithHeaderDio(invoice, token: authToken);
+    final invoicedata = response.data;
+    logger.d("yeeeeeee-----${invoicedata['data']['invoiceData']}");
+    var a = InvoiceData.fromJson(invoicedata['data']['invoiceData']);
+
+
+
+
+    carNoController.text = a.carNo.toString();
+    customerNameController.text = a.userName.toString();
+    userId = a.userId.toString();
+    carNameController.text="abc";
+    tyreSizeController.text=a.tyreType!.title.toString();
+    selecteBillTyep.value  =a.isGst==1?BillTyep.NonGSTBill:BillTyep.GSTBill;
+    tyre_type_id=int.parse(a.tyreType!.tyreTypeId!.toString());
+    oldInvoiceNo=a.invoiceId;
+
+
+    for (var b = 0; b < a.innerInvoice!.length; b++) {
+      print("in-------55");
+
+
+      if( a.innerInvoice?[b].itemType==1){
+        bool foundMatchingItem = false;
+        print("in-----22222--55");
+        // var item = {
+        //   "_invoice_item_id": a.innerInvoice?[b].iInvoiceItemId,
+        //   "item_type": 1,
+        //   "tyre_brand_id":  a.innerInvoice?[b].tyreBrandId,
+        //   "price":  a.innerInvoice?[b].price,
+        //   "total":  0,
+        // };
+        // final newItem =BillingItemEdit (
+        //   index: billingItems.length + 1,
+        //   invoiceItemId:a.innerInvoice![b].iInvoiceItemId!.toInt(),
+        //   itemName:  a.innerInvoice![b].tyreBrand!.title.toString(),
+        //   itemID: a.innerInvoice![b].tyreBrandId!.toInt(),
+        //   price:  a.innerInvoice![b].price!.toDouble(),
+        //   rate: 0,
+        //   quantity:  1, ischeck: false,
+        // );
+
+        for (var item in oldbillingItems) {
+
+          if (item.itemName ==  a.innerInvoice![b].tyreBrand!.title.toString()) {
+            print("adddddd chippp-----found");
+            item.quantity = item.quantity + 1;
+            totalOldQTY=totalOldQTY!+1;
+
+            foundMatchingItem = true;
+            update();
+            break; // Exit the loop since the item was found and updated
+          }
+        }
+
+        if (!foundMatchingItem) {
+          print("adddddd chippp-----not found");
+          final newItem =BillingItemEdit (
+            invoiceItemId:a.innerInvoice![b].iInvoiceItemId!.toInt(),
+            index: billingItems.length + 1,
+            itemName:  a.innerInvoice![b].tyreBrand!.title.toString(),
+            itemID: a.innerInvoice![b].tyreBrandId!.toInt(),
+            price:  a.innerInvoice![b].price!.toDouble(),
+            rate: 0,
+            quantity:  1, ischeck: false,
+          );
+          oldbillingItems.add(newItem);
+  totalOldQTY=totalOldQTY!+1;
+
+          print("adddddd chippp-----not found---${billingItems.length}");
+
+          update();
+        }
+
+
+
+
+
+
+        update();
+      }
+      else if( a.innerInvoice?[b].itemType==2){
+        aligmnetPrice.text= a.innerInvoice![b].price.toString();
+      }
+
+    }
+    logger.d("total old qty::---${totalOldQTY}");
+
+
+    update();
+  }
+
+
+
+
+
   List<String> selectedChips = [];
 
   SubmitBill() async {
-    print("billllll saveee----");
+    print("replaceee billlll");
 
     var itemsList = [];
 
     for (var i = 0; i < billingItems.length; i++) {
       for (var a = 0; a < billingItems[i].quantity; a++) {
+            logger.d("thsi is_invoice_item_id  :${ selectedBillItem[i].itemID.toInt()}");
+
+
         var item = {
+
+          "invoice_item_id":  selectedBillItem[i].invoiceItemId,//old billing id
           "_invoice_item_id": 0,
           "item_type": 1,
-          "tyre_brand_id": billingItems[i].itemID,
+          "tyre_brand_id":  billingItems[i].itemID,
           "price": billingItems[i].price,
           "total": billingItems[i].price
+
+
+
         };
         itemsList.add(item);
       }
@@ -315,6 +435,7 @@ class CreatebillviewController extends GetxController {
       var ind = double.parse(discountController.text);
       var item = {
         "_invoice_item_id": 0,
+
         "item_type": 3,
         "tyre_brand_id": 0,
         "price": ind,
@@ -326,7 +447,7 @@ class CreatebillviewController extends GetxController {
     if (isChecked == true) {
       var ind = double.parse(aligmnetPrice.text);
       var item = {
-        "_invoice_item_id": 0,
+
         "item_type": 2,
         "tyre_brand_id": 0,
         "price": ind,
@@ -336,7 +457,7 @@ class CreatebillviewController extends GetxController {
     }
     if (isgstBill.value == true) {
       var item = {
-        "_invoice_item_id": 0,
+
         "item_type": 4,
         "tyre_brand_id": 0,
         "price": gstAmount,
@@ -345,24 +466,24 @@ class CreatebillviewController extends GetxController {
       itemsList.add(item);
     }
 
-    logger.d("this new itme invoce::---${itemsList}");
+
 
     var date = DateFormat('yyyy-MM-dd HH:mm:ss')
         .format(selectedDate ?? DateTime.now());
     print("yeeee date:-${date}");
     var data = {
       "invoice_id": 0,
-      "invoice_type": 1,
+      "_invoice_id":oldInvoiceNo,
+      "invoice_type": 2,
       "user_id": 0,
-      "phone_number":mobileNumberController.text,
       "user_name": customerNameController.text,
       "invoice_no": int.parse(billNoController.text.toString()),
       "invoice_date": date,
       "car_no": carNoController.text,
       "is_gst": isgstBill.value == true ? 0 : 1,
       "is_alignment_balancing": isChecked == true ? 1 : 0,
-      "tyre_type_id": tyre_SizeId,
-      "car_brand_id": selectCarID,
+      "tyre_type_id":12,
+      "car_brand_id":45,
       "subtotal": subtotal,
       "final_total": grandTotal,
       "current_km": kmController.text,
@@ -378,20 +499,24 @@ class CreatebillviewController extends GetxController {
     var authToken = prefs.getString(kAccessToken);
     var response =
         await APIServices.putWithDio(creteInvoiceUrl, data, token: authToken);
-    logger.d("reponse::--${response}");
+
 
     //   print("reponse:222:--${response.data}");
     if (response.data['message'] == "Success.") {
-      var home = Get.put(BottamnavigationviewController());
-      home.persistentTabController!.index=2;
-      home.update();
-      // var search = Get.put(SearchviewController());
-      // search.emptySearchdata();
-      // search.update();
+      var  bottam = Get.put(
+          BottamnavigationviewController());
 
-      // home.getDashBoardData();
-      // home.update();
-      // Ge.
+      var home = Get.put(HomeviewController());
+      var search = Get.put(SearchviewController());
+      search.emptySearchdata();
+
+      search.update();
+
+      home.getDashBoardData();
+      home.update();
+      bottam.persistentTabController!.index=2;
+      bottam.update();
+      Get.back();
       Get.snackbar("Success", "Invoice create Successfully",
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.white);
     } else {
@@ -404,6 +529,7 @@ class CreatebillviewController extends GetxController {
   void onInit() {
     setDefaultDate();
     getInvoiceNumber();
+    getInvoiceData();
     super.onInit();
   }
 

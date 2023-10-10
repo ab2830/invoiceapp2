@@ -31,8 +31,8 @@ class SplashviewView extends GetView<SplashviewController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          SvgPicture.asset("assets/applogo.svg",height: 250.h,width: 250.w,)
+            children: [Image.asset("assets/NavCarTyre.png",height: 250.h,width: 250.w,)
+         //SvgPicture.asset("assets/applogo.svg",height: 250.h,width: 250.w,)
           ],),
 
         ),

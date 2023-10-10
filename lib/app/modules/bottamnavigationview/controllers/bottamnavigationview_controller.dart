@@ -18,6 +18,7 @@ import '../../createbillview/views/createbillview_view.dart';
 import '../../homeview/views/homeview_view.dart';
 import '../../invoicelist/views/invoicelist_view.dart';
 import '../../replacementbill/views/replacementbill_view.dart';
+import '../../searchview/views/invoicelist_replace.dart';
 
 class BottamnavigationviewController extends GetxController {
   //TODO: Implement BottamnavigationviewController
@@ -126,7 +127,7 @@ class BottamnavigationviewController extends GetxController {
                           GestureDetector(
                             onTap:(){
                               Navigator.pop(context);
-                              Get.to(SearchviewView());
+                              Get.to(ReplaceInvoice());
                             },
                             child: CircleAvatar(
                               radius: 55.r,
