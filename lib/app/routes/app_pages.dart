@@ -30,6 +30,8 @@ import '../modules/profileview/bindings/profileview_binding.dart';
 import '../modules/profileview/views/profileview_view.dart';
 import '../modules/replacementbill/bindings/replacementbill_binding.dart';
 import '../modules/replacementbill/views/replacementbill_view.dart';
+import '../modules/replacementnew/bindings/replacementnew_binding.dart';
+import '../modules/replacementnew/views/replacementnew_view.dart';
 import '../modules/searchview/bindings/searchview_binding.dart';
 import '../modules/searchview/views/searchview_view.dart';
 import '../modules/selectcar/bindings/selectcar_binding.dart';
@@ -139,8 +141,13 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FILLTERDASHBOARD,
-      page: () =>  FillterdashboardView(),
+      page: () => FillterdashboardView(),
       binding: FillterdashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPLACEMENTNEW,
+      page: () => const ReplacementnewView(),
+      binding: ReplacementnewBinding(),
     ),
   ];
 }

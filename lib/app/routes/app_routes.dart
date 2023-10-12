@@ -22,6 +22,7 @@ abstract class Routes {
   static const EDITBILLDATA = _Paths.EDITBILLDATA;
   static const INVOICEPDF = _Paths.INVOICEPDF;
   static const FILLTERDASHBOARD = _Paths.FILLTERDASHBOARD;
+  static const REPLACEMENTNEW = _Paths.REPLACEMENTNEW;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const EDITBILLDATA = '/editbilldata';
   static const INVOICEPDF = '/invoicepdf';
   static const FILLTERDASHBOARD = '/fillterdashboard';
+  static const REPLACEMENTNEW = '/replacementnew';
 }
