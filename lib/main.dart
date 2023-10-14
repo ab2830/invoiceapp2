@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/routes/app_pages.dart';
 import 'package:logger/logger.dart';
-
+import 'package:package_info_plus/package_info_plus.dart';
 var logger = Logger(
   printer: PrettyPrinter(),
 );
@@ -23,7 +23,7 @@ final oCcy = new NumberFormat("#,##0.00", "en_US");
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+
 
   runApp(
       ScreenUtilInit(

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "314102140209",
+    "firebase_url": "https://sample2-dbabc.firebaseio.com",
+    "project_id": "sample2-dbabc",
+    "storage_bucket": "sample2-dbabc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314102140209:android:8db7b60eea7ae8e2a87410",
+        "android_client_info": {
+          "package_name": "com.app.navcar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314102140209-oujn2h4nmvafjl3hobf8sm19anjs24hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvn3PDHJUWgmIzoGVbUrpZTL2GIobLPnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314102140209-5tedi8fot485pkta3bib1p4g8ove3v68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

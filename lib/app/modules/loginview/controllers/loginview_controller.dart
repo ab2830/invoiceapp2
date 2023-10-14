@@ -98,10 +98,10 @@ class LoginviewController extends GetxController {
 
       print("loginResponse-${loginResponse!.data}");
       print("logintoken:---${loginResponse!.data!.token.toString()}");
-     Get.offAll(BottamnavigationviewView());
-      var a=Get.put(OtpverificationviewController());
-      a.usernumber=loginResponse!.data!.user!.phoneNumber.toString();
-      a.update();
+     //Get.offAll(BottamnavigationviewView());
+     //  var a=Get.put(OtpverificationviewController());
+     //  a.usernumber=loginResponse!.data!.user!.phoneNumber.toString();
+     //  a.update();
 
       Get.to(OtpverificationviewView(),arguments: loginResponse!.data!.user!.phoneNumber);
       Get.snackbar(
