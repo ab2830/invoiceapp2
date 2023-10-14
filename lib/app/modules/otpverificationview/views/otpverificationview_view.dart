@@ -151,6 +151,7 @@ class OtpverificationviewView extends GetView<OtpverificationviewController> {
                       maxHeight: 80.h,
                       color: Colors.white,
                       onPressed: () {
+                   //     controller. verifyPhoneNumber("+919510285381");
                         Get.offAll(BottamnavigationviewView());
 
                         // print("otpp-----${controller.otp}");

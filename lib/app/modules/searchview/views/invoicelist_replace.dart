@@ -15,17 +15,18 @@ import '../../../../utils/model/invoice_model.dart';
 import '../../../../utils/network_utils.dart';
 import '../../../../utils/string_const.dart';
 import '../../replacementbill/views/replacementbill_view.dart';
+import '../../replacementnew/controllers/replacementnew_controller.dart';
 import '../controllers/searchview_controller.dart';
 
-class ReplaceInvoice extends GetView<SearchviewController> {
+class ReplaceInvoice extends GetView<ReplacementnewController> {
   ReplaceInvoice({Key? key}) : super(key: key);
-  var search = Get.put(SearchviewController());
+   var search = Get.put(ReplacementnewController());
 
 
   @override
   Widget build(BuildContext context) {
     var search2 = Get.put(SearchviewController());
-    search2.firstLoad();
+
 
 
 
@@ -36,7 +37,7 @@ class ReplaceInvoice extends GetView<SearchviewController> {
       child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: Text('Invoice List',
+            title: Text(replaceill,
                 style: GoogleFonts.dmSans(
                     fontWeight: FontWeight.w700,
                     fontSize: 24.sp,
@@ -45,8 +46,8 @@ class ReplaceInvoice extends GetView<SearchviewController> {
             centerTitle: true,
             leading: GestureDetector(
                 onTap: () {
-                  controller.searchController.clear();
-                  controller.emptySearchdata();
+                  // controller.searchController.clear();
+                  // controller.emptySearchdata();
 
                   controller.update();
                   Get.back();
@@ -67,21 +68,18 @@ class ReplaceInvoice extends GetView<SearchviewController> {
                   hintText: searchHint,
                   controller: controller.searchController,
                   contentPadding: EdgeInsets.symmetric(horizontal: 8.h),
-                  prefixIcon: Icon(FontAwesomeIcons.search),
-                  suffixIcon:IconButton(icon: Icon(FontAwesomeIcons.xmark),onPressed: (){
+                  prefixIcon: const Icon(FontAwesomeIcons.search),
+                  suffixIcon:IconButton(icon: const Icon(FontAwesomeIcons.xmark),
+                    onPressed: (){
                     controller.searchController.clear();
-                    controller.emptySearchdata();
-                    //controller.invoceListData=controller.tempInvoceListData;
                     controller.update();
-                    // controller.emptySearchdata();
+
                   },),
                   onChanged: (value) {
-                    ///search logic
-                    if (value.trim().isNotEmpty) {
-                      controller.searchProduct(value);
-                    } else {
-                      controller.emptySearchdata();
-                    }
+                  if(  search.searchController.text.isNotEmpty){
+                    search.firstLoad(search:search.searchController.text );
+                  }
+
                   },
 
                   // suffixIcon: Icon(FontAwesomeIcons.angleDown),
@@ -92,7 +90,7 @@ class ReplaceInvoice extends GetView<SearchviewController> {
               ),
               Expanded(
                 child:
-                search.invoceListData.isEmpty && search.searchController.text.isNotEmpty?
+                search.invoceListData.isEmpty && search.searchController.text.isEmpty?
                 const Center(child: Text("No Data Found")):
                 SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -251,24 +249,6 @@ class ReplaceInvoice extends GetView<SearchviewController> {
                 ),
               ),
 
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 8.w),
-              //   child: CustomButton(
-              //     maxHeight: 80.h,
-              //     color: ConstColor.appPrimary2,
-              //     onPressed: () {
-              //       Get.to(ReplacementbillView());
-              //       // if (controller.loginFormKey.currentState!.validate()) {
-              //       //   FocusManager.instance.primaryFocus?.unfocus();
-              //       //   controller.callLoginApi();
-              //       // }
-              //     },
-              //     title: "Search",
-              //     fontWeight: FontWeight.w700,
-              //     fontSize: 16.sp,
-              //     textColor: Colors.white,
-              //   ),
-              // ),
             ],
           )),
     );

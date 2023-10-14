@@ -1,4 +1,4 @@
-package com.example.freelancing
+package com.app.navcar
 
 import io.flutter.embedding.android.FlutterActivity
 

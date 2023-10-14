@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../utils/network_utils.dart';
 import '../../loginview/controllers/auth_manger.dart';
 import '../../loginview/views/loginview_view.dart';
+import '../../otpverificationview/views/otpverificationview_view.dart';
 
 class SplashviewController extends GetxController {
   //TODO: Implement SplashviewController
