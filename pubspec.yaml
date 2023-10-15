@@ -60,6 +60,10 @@ dependencies:
   logger: ^2.0.2
   firebase_core: ^2.15.1
   firebase_auth: ^4.9.0
+<<<<<<< Updated upstream
+=======
+  firebase_messaging:
+>>>>>>> Stashed changes
 
   intl: ^0.18.1
 
@@ -117,4 +121,10 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 #flutter build apk --release --split-per-abi --no-shrink
 
+<<<<<<< Updated upstream
 #keytool -list -v -keystore nav.jks -alias nav
+=======
+  #keytool -list -v -keystore nav.jks -alias nav
+#keytool -genkeypair -nav -keyalg RSA -keysize 2048 -validity 10000 -keystore nav.jks
+# keytool -list -v -keystore "C:\Users\yourname\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+>>>>>>> Stashed changes
