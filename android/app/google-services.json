@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "314102140209",
-    "firebase_url": "https://sample2-dbabc.firebaseio.com",
-    "project_id": "sample2-dbabc",
-    "storage_bucket": "sample2-dbabc.appspot.com"
+    "project_number": "866618106274",
+    "project_id": "navcarapp-6d1a0",
+    "storage_bucket": "navcarapp-6d1a0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:314102140209:android:8db7b60eea7ae8e2a87410",
+        "mobilesdk_app_id": "1:866618106274:android:ed866e7e301ad8f595d2fb",
         "android_client_info": {
           "package_name": "com.app.navcar"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "314102140209-oujn2h4nmvafjl3hobf8sm19anjs24hk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCvn3PDHJUWgmIzoGVbUrpZTL2GIobLPnk"
+          "current_key": "AIzaSyCTW0XryGJuQeyV6NUoWvljpYTtBJqlT6A"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "314102140209-5tedi8fot485pkta3bib1p4g8ove3v68.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

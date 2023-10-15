@@ -1,10 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../utils/api_services.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+
 import '../../../../utils/network_utils.dart';
+import '../../bottamnavigationview/views/bottamnavigationview_view.dart';
 
 class OtpverificationviewController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -14,16 +20,32 @@ class OtpverificationviewController extends GetxController
   final count = 0.obs;
   var usernumber;
 
-
   //
   RxBool loading = false.obs;
   RxString verificationId = ''.obs;
   RxString phoneNumber = ''.obs; // Add the phone number variable
 
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+  );
+
+  Future<void> _initPackageInfo() async {
+    _packageInfo = await PackageInfo.fromPlatform();
+    print("object----${_packageInfo.buildNumber}");
+    print("object-ver---${_packageInfo.version}");
+    print("object-ver---${_packageInfo.packageName}");
+  }
+
   @override
   void onInit() {
+    _initPackageInfo();
 
-
+    verifyPhoneNumber("+"
+        "917046620477");
     super.onInit();
   }
 
@@ -47,8 +69,10 @@ class OtpverificationviewController extends GetxController
   }
 
   Future<void> verifyPhoneNumber(String phoneNumber) async {
+    print("calll----${phoneNumber}");
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
+      timeout: Duration(seconds: 30),
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
       },
@@ -56,58 +80,62 @@ class OtpverificationviewController extends GetxController
         Get.snackbar('Error', 'Phone verification failed: ${e.message}');
       },
       codeSent: (String verificationId, int? resendToken) {
-        // Save the verification ID somewhere for later use
-        // You can send the code to the user's phone using an SMS service here
-        // Navigate to the OTP screen and pass the verification ID
         print("verificationIdverificationIdverificationId---${verificationId}");
-     //   Get.to(OTPScreen(verificationId));
+        //   Get.to(OTPScreen(verificationId));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
-  // Future<void> verifyPhoneNumber(String phoneNumber) async {
-  //   print("calll----${phoneNumber}");
-  //   loading.value = true;
-  //   this.phoneNumber.value = phoneNumber; // Store the phone number
-  //   await _auth.verifyPhoneNumber(
-  //     phoneNumber: phoneNumber,
-  //     verificationCompleted: (PhoneAuthCredential credential) {
-  //       // Auto-verification
-  //     },
-  //     verificationFailed: (FirebaseAuthException e) {
-  //       print("----------verificationFailed-------------- ${e.toString()}");
-  //       // Handle the error
-  //       loading.value = false;
-  //     },
-  //     codeSent: (String verId, int? resendToken) {
-  //       print("------------------------send-----code");
-  //       verificationId.value = verId;
-  //       loading.value = false;
-  //     },
-  //     codeAutoRetrievalTimeout: (String verId) {
-  //       print("----------codeAutoRetrievalTimeout------------ ");
-  //       verificationId.value = verId;
-  //       loading.value = false;
-  //     },
-  //   );
+  // void signInWithPhoneNumber(String smsCode) async {
+  //
+  //   EasyLoading.show();
+  //   try {
+  //     loading.value = true;
+  //     AuthCredential credential = PhoneAuthProvider.credential(
+  //       verificationId: verificationId.value,
+  //       smsCode: smsCode,
+  //     );
+  //
+  //     try {
+  //       await _auth.signInWithCredential(credential);
+  //       EasyLoading.dismiss();
+  //       Get.offAll(BottamnavigationviewView());
+  //     } on FirebaseAuthException catch (e) {
+  //       if (e.code == 'invalid-verification-code') {
+  //         Get.snackbar("Error", "The verification code is invalid.",
+  //             snackPosition: SnackPosition.TOP, colorText: Colors.black);
+  //         throw Exception(
+  //             'The verification code is invalid. Please try again.');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     loading.value = false;
+  //     // Handle the error
+  //   }
   // }
-
-  void signInWithPhoneNumber(String smsCode) async {
+  void signInWithPhoneNumber(  String otp) async {
+    EasyLoading.show();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    // Sign in the user with the phone number and the received OTP
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: "YOUR_VERIFICATION_ID", smsCode: otp);
     try {
-      loading.value = true;
-      AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId.value,
-        smsCode: smsCode,
-      );
-      await _auth.signInWithCredential(credential);
-      loading.value = false;
-      // Navigate to the next screen or do something else
-    } catch (e) {
-      loading.value = false;
-      // Handle the error
+      await auth.signInWithCredential(credential);
+      EasyLoading.dismiss();
+      Get.offAll(BottamnavigationviewView());
+      // Successfully signed in
+    } on FirebaseAuthException catch (e) {
+      EasyLoading.dismiss();
+      if (e.code == 'invalid-verification-code') {
+        Get.snackbar("Error", "The verification code is invalid.");
+        //             snackPosition: SnackPosition.TOP, colorText: Colors.black);
+        // Handle the case when the OTP entered is incorrect
+        throw Exception('The verification code is invalid. Please try again.');
+      } else {
+        EasyLoading.dismiss();
+        Get.snackbar("Error", "Something went to wrong");
+        // Handle other FirebaseAuthException error codes
+      }
     }
   }
 }
-
-

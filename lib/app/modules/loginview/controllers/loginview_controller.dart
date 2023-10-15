@@ -72,8 +72,7 @@ class LoginviewController extends GetxController {
       "password": "123456"
     };
 
-    print("urllll---$loginUrl");
-    print("urllll---$data");
+
 
     var finaldata = await APIServices.postLogin(loginUrl, data);
 
@@ -99,9 +98,9 @@ class LoginviewController extends GetxController {
       print("loginResponse-${loginResponse!.data}");
       print("logintoken:---${loginResponse!.data!.token.toString()}");
      //Get.offAll(BottamnavigationviewView());
-     //  var a=Get.put(OtpverificationviewController());
-     //  a.usernumber=loginResponse!.data!.user!.phoneNumber.toString();
-     //  a.update();
+      var a=Get.put(OtpverificationviewController());
+      a.usernumber=loginResponse!.data!.user!.phoneNumber.toString();
+      a.update();
 
       Get.to(OtpverificationviewView(),arguments: loginResponse!.data!.user!.phoneNumber);
       Get.snackbar(
