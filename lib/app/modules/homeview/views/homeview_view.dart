@@ -26,11 +26,11 @@ class HomeviewView extends GetView<HomeviewController> {
 
             backgroundColor: Colors.white, //<-- SEE HERE
           ),
-          body: RefreshIndicator(
-            onRefresh: ()async{
-              controller.getDashBoardData();
-            },
-            child: SingleChildScrollView(
+          body: SingleChildScrollView(
+            child: RefreshIndicator(
+              onRefresh: ()async{
+                controller.getDashBoardData();
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,

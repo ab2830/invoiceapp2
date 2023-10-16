@@ -23,7 +23,14 @@ final oCcy = new NumberFormat("#,##0.00", "en_US");
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
+  String appName = packageInfo.appName;
+  String packageName = packageInfo.packageName;
+  String version = packageInfo.version;
+  String buildNumber = packageInfo.buildNumber;
+  print("----package      ${packageName}");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
   runApp(
       ScreenUtilInit(

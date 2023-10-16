@@ -91,7 +91,6 @@ class OtpverificationviewView extends GetView<OtpverificationviewController> {
                       child: PinCodeTextField(
                         length: 6,
                         cursorColor: Colors.black,
-
                         keyboardType: TextInputType.number,
                         obscureText: false,
                         animationType: AnimationType.fade,
@@ -152,9 +151,7 @@ class OtpverificationviewView extends GetView<OtpverificationviewController> {
                       maxHeight: 80.h,
                       color: Colors.white,
                       onPressed: () {
-                        controller.signInWithPhoneNumber(controller.otpController.text.toString());
-                   //     controller. verifyPhoneNumber("+919510285381");
-                        ///Get.offAll(BottamnavigationviewView());
+                     //   Get.offAll(BottamnavigationviewView());
 
                         // print("otpp-----${controller.otp}");
                         // print("user otp---${controller.otpController.text}");

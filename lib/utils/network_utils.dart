@@ -9,6 +9,7 @@ const String tyrelist="listTyreBrands";
 const String carList="listCarBrands";
 const String tyreSizeList="listTyreTypes";
 const String dashboardstats="dashboardStat";
+const String filterDashBoard="dashboardStatDateWise";
 const String getallBillList="listInvoice";
 const String getInvoiceNo="getInvoiceNumber";
 const String getInvoiceDetails="getInvoice";

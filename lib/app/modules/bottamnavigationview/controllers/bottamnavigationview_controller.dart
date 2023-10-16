@@ -26,18 +26,40 @@ class BottamnavigationviewController extends GetxController {
 
   final count = 0.obs;
 
- var userRol;
+  List<PersistentBottomNavBarItem> navBarItems() {
+    return [
+      PersistentBottomNavBarItem(
+          icon: Icon(FontAwesomeIcons.houseChimney),
+          title: "Home",
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.white),
+      PersistentBottomNavBarItem(
+          onPressed: (c) {
+            bottamSheet();
+          },
+          icon: Icon(FontAwesomeIcons.receipt),
+          title: "Invoice",
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.white),
 
-  getLocal() async {
-   final prefs = await SharedPreferences.getInstance();
-   userRol=prefs.getString(kUserRole);
-   print("user role----${userRol}");
-   update();
+      PersistentBottomNavBarItem(
+          icon: Icon(FontAwesomeIcons.search),
+          title: "Search",
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.white),
+      PersistentBottomNavBarItem(
+          icon: Icon(FontAwesomeIcons.arrowRightFromBracket),
+          onPressed: (c) {
+            logoutSheet();
+          },
+          title: "Logout",
+          activeColorPrimary: Colors.white,
+          inactiveColorPrimary: Colors.white),
+    ];
   }
 
   @override
   void onInit() {
-    getLocal();
     persistentTabController = PersistentTabController(
       initialIndex: 0,
     );
@@ -227,7 +249,6 @@ class BottamnavigationviewController extends GetxController {
   }
   List<Widget> screens() {
     return [
-      if(userRol =='1')
       HomeviewView(),
       Container(),
       SearchviewView(),
@@ -240,37 +261,5 @@ class BottamnavigationviewController extends GetxController {
 
 
 
-  }
-  List<PersistentBottomNavBarItem> navBarItems() {
-    return [
-      if(userRol =='1')
-        PersistentBottomNavBarItem(
-            icon: Icon(FontAwesomeIcons.houseChimney),
-            title: "Home",
-            activeColorPrimary: Colors.white,
-            inactiveColorPrimary: Colors.white),
-      PersistentBottomNavBarItem(
-          onPressed: (c) {
-            bottamSheet();
-          },
-          icon: Icon(FontAwesomeIcons.receipt),
-          title: "Invoice",
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.white),
-
-      PersistentBottomNavBarItem(
-          icon: Icon(FontAwesomeIcons.search),
-          title: "Search",
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.white),
-      PersistentBottomNavBarItem(
-          icon: Icon(FontAwesomeIcons.arrowRightFromBracket),
-          onPressed: (c) {
-            logoutSheet();
-          },
-          title: "Logout",
-          activeColorPrimary: Colors.white,
-          inactiveColorPrimary: Colors.white),
-    ];
   }
 }

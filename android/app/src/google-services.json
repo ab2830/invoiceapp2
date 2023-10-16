@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702055997494",
+    "project_id": "navcar-app",
+    "storage_bucket": "navcar-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702055997494:android:637f81b4b43067bddcb897",
+        "android_client_info": {
+          "package_name": "com.example.navcar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLZxznsKH4J4u7n91-Pn6DX5yN8q2vHYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

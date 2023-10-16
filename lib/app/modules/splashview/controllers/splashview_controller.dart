@@ -39,8 +39,7 @@ class SplashviewController extends GetxController {
 
 
     token !=null && token !=''
-        ? Get.offAll(OtpverificationviewView())
-    //Get.offAll(BottamnavigationviewView())
+        ? Get.offAll(BottamnavigationviewView())
         : Get.offAll(LoginviewView());
     update();
   }

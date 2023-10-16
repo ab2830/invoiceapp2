@@ -383,8 +383,13 @@ class CreatebillviewController extends GetxController {
     //   print("reponse:222:--${response.data}");
     if (response.data['message'] == "Success.") {
       var home = Get.put(BottamnavigationviewController());
+      var homedata = Get.put(HomeviewController());
+      homedata.getDashBoardData();
+      homedata.update();
+
       home.persistentTabController!.index=2;
       home.update();
+      Get.back();
       // var search = Get.put(SearchviewController());
       // search.emptySearchdata();
       // search.update();
