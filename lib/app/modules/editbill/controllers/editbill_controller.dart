@@ -518,10 +518,10 @@ class EditbillController extends GetxController {
       bottam.update();
       Get.back();
       Get.snackbar("Success", "Invoice create Successfully",
-          snackPosition: SnackPosition.BOTTOM, colorText: Colors.white);
+          snackPosition: SnackPosition.TOP, colorText: Colors.black);
     } else {
       Get.snackbar("Error", response.data['message'],
-          snackPosition: SnackPosition.BOTTOM, colorText: Colors.white);
+          snackPosition: SnackPosition.TOP, colorText: Colors.black);
     }
   }
 

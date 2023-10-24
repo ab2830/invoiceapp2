@@ -43,7 +43,7 @@ class ReplacementnewController extends GetxController {
   ScrollController? scrollController;
 
   void firstLoad({String? search}) async {
-    print("callllll----33");
+
     isFirstLoadRunning = true;
     update();
     try {

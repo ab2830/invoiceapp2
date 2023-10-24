@@ -39,7 +39,7 @@ class SplashviewController extends GetxController {
 
 
     token !=null && token !=''
-        ? Get.offAll(BottamnavigationviewView())
+        ? Get.offAll(BottamnavigationviewView ())
         : Get.offAll(LoginviewView());
     update();
   }

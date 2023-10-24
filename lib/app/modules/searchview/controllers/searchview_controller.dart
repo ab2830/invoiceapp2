@@ -51,6 +51,7 @@ class SearchviewController extends GetxController {
     super.onInit();
   }
   searchProduct(String value) async {
+    print("search call--");
     tempInvoceListData=invoceListData;
     update();
     invoceListData=[];
